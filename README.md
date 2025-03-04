@@ -14,10 +14,7 @@ Try it out: [https://krtk.ee/](https://krtk.ee/)
 - **Minimalist Web UI** – Simple and functional interface.
 
 ## Screenshot
-
-```
 ![Web UI](https://github.com/ajarmoszuk/krtk/blob/master/screenshot.png?raw=true)
-```
 
 ## Installation
 
