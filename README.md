@@ -1,4 +1,4 @@
-![CleanShot 2025-03-04 at 05 16 51](https://github.com/user-attachments/assets/e59f6c29-3208-4ad9-8bd3-0d17381ef552)# krtk.ee - Simple URL Shortener
+# krtk.ee - Simple URL Shortener
 
 This project was created because I didn't see any easy-to-use or easy-to-deploy URL shorteners, so I made my own.
 
@@ -16,7 +16,7 @@ Try it out: [https://krtk.ee/](https://krtk.ee/)
 ## Screenshot
 
 ```
-![Web UI](screenshot.png)
+![Web UI](https://github.com/user-attachments/assets/e59f6c29-3208-4ad9-8bd3-0d17381ef552)#
 ```
 
 ## Installation
