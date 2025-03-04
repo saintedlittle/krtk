@@ -1,4 +1,4 @@
-name: Go
+name: Go Build
 
 on:
   push:
@@ -23,7 +23,16 @@ jobs:
         run: go mod tidy
 
       - name: Build
-        run: go build -v ./...
+        run: |
+          mkdir -p build
+          go build -o build/krtk -v ./cmd/krtk
 
       - name: Test
         run: go test -v ./...
+
+      - name: Upload binary as artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: krtk-binary
+          path: build/krtk
+          retention-days: 7

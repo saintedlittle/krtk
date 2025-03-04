@@ -2,6 +2,8 @@
 
 krtk.ee (/ˈkrut.kʲɛ/) or KROOT-kyeh was created because I didn't see any easy-to-use or easy-to-deploy URL shorteners, so I made my own.
 
+[![Go](https://github.com/ajarmoszuk/krtk/actions/workflows/go.yml/badge.svg)](https://github.com/ajarmoszuk/krtk/actions/workflows/go.yml)
+
 ## Live Demo
 
 Try it out: [https://krtk.ee/](https://krtk.ee/)

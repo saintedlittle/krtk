@@ -1,0 +1,4 @@
+github.com/dchest/captcha v1.1.0 h1:2kt47EoYUUkaISobUdTbqwx55xvKOJxyScVfw25xzhQ=
+github.com/dchest/captcha v1.1.0/go.mod h1:7zoElIawLp7GUMLcj54K9kbw+jEyvz2K0FDdRRYhvWo=
+github.com/mattn/go-sqlite3 v1.14.24 h1:tpSp2G2KyMnnQu99ngJ47EIkWVmliIizyZBfPrBWDRM=
+github.com/mattn/go-sqlite3 v1.14.24/go.mod h1:Uh1q+B4BYcTPb+yiD3kU8Ct7aC0hY9fxUwlHK0RXw+Y=
