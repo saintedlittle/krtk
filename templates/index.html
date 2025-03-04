@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ktrk.ee - url shortener</title>
+<meta name="description" content="krtk.ee is an easy-to-use url shortener">
+<style>
+  body {
+    font-family: monospace;
+    background-color: #020202;
+    color: #0f0;
+    text-align: center;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    overflow: clip;
+  }
+  .container {
+    display: flex;
+    flex-direction: column;
+    background: #000;
+    border: 2px solid #0f0;
+    padding: 15px;
+    box-shadow: 3px 3px #0a0;
+    width: 90%;
+    max-width: 400px;
+  }
+  .title {
+    font-size: 18px;
+    font-weight: bold;
+    padding-bottom: 5px;
+  }
+  input, button {
+    font-family: monospace;
+    padding: 10px;
+    margin: 5px;
+    border: 1px solid #0f0;
+    background: #000;
+    color: #0f0;
+    width: 253px;
+  }
+  #original-url {
+    margin-bottom: 15px;
+  }
+  .captcha-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  #captcha-img {
+    border: 1px solid #0f0;
+    background: black;
+    padding: 5px;
+    image-rendering: pixelated;
+    width: 160px;
+    height: 60px;
+    margin-bottom: 5px;
+  }
+  .output {
+    margin-top: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  #shortened-url {
+    flex: 1;
+    width: auto;
+    border: 1px solid #0f0;
+    background: #000;
+    color: #0f0;
+    text-align: center;
+  }
+  .copy-btn {
+    width: auto;
+    padding: 10px;
+    cursor: pointer;
+  }
+  .github {
+    margin-top: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 14px;
+    color: #0f0; 
+    text-decoration: none;
+  }
+  .github:hover {
+    text-decoration: underline;
+  }
+  .github img {
+    width: 18px;
+    height: 18px;
+    margin-right: 5px;
+    filter: invert(100%) sepia(100%) hue-rotate(44deg) saturate(500%);
+    background: none;
+  }
+  sup {
+    font-size: 12px;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="title">krtk.ee <sup>url shortener</sup> </div>
+  <form id="shorten-form">
+    <input type="text" id="original-url" placeholder="enter url" required>
+    
+    <div class="captcha-container">
+      <img id="captcha-img" src="">
+      <input type="text" id="captcha" placeholder="captcha" required>
+    </div>
+
+    <input type="hidden" id="captcha-id">
+    <button type="submit">shorten</button>
+  </form>
+
+  <div class="output">
+    <input type="text" id="shortened-url" readonly>
+    <button class="copy-btn" onclick="copyLink()">copy</button>
+  </div>
+
+  <a href="https://github.com/ajarmoszuk/krtk" class="github">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/9/91/Octicons-mark-github.svg" alt="GitHub">
+    view on github
+  </a>
+</div>
+
+<script>
+async function loadCaptcha() {
+  const res = await fetch('/captcha');
+  const data = await res.json();
+  document.getElementById('captcha-img').src = "/captcha/" + data.captcha_id;
+  document.getElementById('captcha-id').value = data.captcha_id;
+}
+document.addEventListener("DOMContentLoaded", loadCaptcha);
+
+document.getElementById('shorten-form').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const originalUrl = document.getElementById('original-url').value;
+  const captchaId = document.getElementById('captcha-id').value;
+  const captchaValue = document.getElementById('captcha').value;
+  const shortenedUrlField = document.getElementById('shortened-url');
+
+  shortenedUrlField.value = "";
+
+  const res = await fetch('/shorten', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ original: originalUrl, captcha_id: captchaId, captcha: captchaValue })
+  });
+
+  const data = await res.json();
+
+  if (data.short) {
+    shortenedUrlField.value = window.location.origin + data.short;
+    shortenedUrlField.dataset.url = data.short;
+  } else {
+    shortenedUrlField.value = "error: " + (data.message || "failed to shorten url");
+  }
+
+  loadCaptcha();
+});
+
+function copyLink() {
+  const link = document.getElementById('shortened-url');
+  link.select();
+  document.execCommand("copy");
+}
+</script>
+</body>
+</html>
