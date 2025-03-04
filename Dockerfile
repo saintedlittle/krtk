@@ -3,7 +3,7 @@ WORKDIR /app
 COPY go.mod go.sum ./
 RUN go mod download
 COPY . .
-RUN go build -o krtk ./cmd/krtk
+RUN go build -o krtk .
 
 FROM alpine:latest
 WORKDIR /root/
