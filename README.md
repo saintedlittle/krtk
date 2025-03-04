@@ -16,7 +16,7 @@ Try it out: [https://krtk.ee/](https://krtk.ee/)
 ## Screenshot
 
 ```
-![Web UI](https://github.com/user-attachments/assets/e59f6c29-3208-4ad9-8bd3-0d17381ef552)#
+![Web UI](https://github.com/ajarmoszuk/krtk/blob/master/screenshot.png?raw=true)
 ```
 
 ## Installation
