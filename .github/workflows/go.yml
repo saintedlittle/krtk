@@ -22,10 +22,10 @@ jobs:
       - name: Install dependencies
         run: go mod tidy
 
-      - name: Build
+      - name: Build Go binary
         run: |
           mkdir -p build
-          go build -o build/krtk -v ./cmd/krtk
+          go build -o build/krtk -v .
 
       - name: Test
         run: go test -v ./...
