@@ -1,6 +1,6 @@
 # krtk.ee - Simple URL Shortener
 
-This project was created because I didn't see any easy-to-use or easy-to-deploy URL shorteners, so I made my own.
+krtk.ee (/ˈkrut.kʲɛ/) or KROOT-kyeh was created because I didn't see any easy-to-use or easy-to-deploy URL shorteners, so I made my own.
 
 ## Live Demo
 
