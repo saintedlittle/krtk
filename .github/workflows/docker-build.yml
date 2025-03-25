@@ -22,18 +22,23 @@ jobs:
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Extract metadata (tags, labels) for Docker
-        id: meta
-        uses: docker/metadata-action@v5
-        with:
-          images: ghcr.io/${{ github.repository_owner }}/krtk
+          password: ${{ secrets.GHCR_PAT }}
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
           context: .
           push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
+          tags: ghcr.io/${{ github.repository_owner }}/krtk:latest,ghcr.io/${{ github.repository_owner }}/krtk:master
+          
+      - name: Make package public
+        run: |
+          echo "Making package public"
+          PACKAGE_NAME="krtk"
+          PACKAGE_VISIBILITY="public"
+          
+          curl -X PATCH \
+            -H "Accept: application/vnd.github.v3+json" \
+            -H "Authorization: token ${{ secrets.GHCR_PAT }}" \
+            "https://api.github.com/user/packages/container/${PACKAGE_NAME}/visibility" \
+            -d '{"visibility":"'${PACKAGE_VISIBILITY}'"}'
