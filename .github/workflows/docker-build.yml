@@ -30,13 +30,26 @@ jobs:
           context: .
           push: true
           tags: ghcr.io/${{ github.repository_owner }}/krtk:latest,ghcr.io/${{ github.repository_owner }}/krtk:master
+          labels: |
+            org.opencontainers.image.source=https://github.com/${{ github.repository }}
+            org.opencontainers.image.description=krtk URL shortener
+            org.opencontainers.image.licenses=WTFPL
           
       - name: Make package public
         run: |
           echo "Making package public"
+          REPO_OWNER="${{ github.repository_owner }}"
           PACKAGE_NAME="krtk"
           PACKAGE_VISIBILITY="public"
           
+          # First try organization package path
+          curl -X PATCH \
+            -H "Accept: application/vnd.github.v3+json" \
+            -H "Authorization: token ${{ secrets.GHCR_PAT }}" \
+            "https://api.github.com/orgs/${REPO_OWNER}/packages/container/${PACKAGE_NAME}/visibility" \
+            -d '{"visibility":"'${PACKAGE_VISIBILITY}'"}' || echo "Not an org package, trying user package"
+            
+          # Then try user package path if organization path fails
           curl -X PATCH \
             -H "Accept: application/vnd.github.v3+json" \
             -H "Authorization: token ${{ secrets.GHCR_PAT }}" \
