@@ -17,6 +17,12 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
       - name: Log in to GitHub Container Registry
         uses: docker/login-action@v2
         with:
@@ -24,16 +30,31 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GHCR_PAT }}
 
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v5
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v5
         with:
-          context: .
-          push: true
-          tags: ghcr.io/${{ github.repository_owner }}/krtk:latest,ghcr.io/${{ github.repository_owner }}/krtk:master
+          images: ghcr.io/${{ github.repository_owner }}/krtk
+          tags: |
+            type=raw,value=latest
+            type=raw,value=master
+            type=raw,value=${{ github.sha }}
           labels: |
             org.opencontainers.image.source=https://github.com/${{ github.repository }}
             org.opencontainers.image.description=krtk URL shortener
             org.opencontainers.image.licenses=WTFPL
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          provenance: false
           
       - name: Make package public
         run: |
@@ -55,3 +76,10 @@ jobs:
             -H "Authorization: token ${{ secrets.GHCR_PAT }}" \
             "https://api.github.com/user/packages/container/${PACKAGE_NAME}/visibility" \
             -d '{"visibility":"'${PACKAGE_VISIBILITY}'"}'
+
+      - name: Verify pushed images
+        run: |
+          echo "Verifying pushed images..."
+          docker pull --platform linux/amd64 ghcr.io/${{ github.repository_owner }}/krtk:latest
+          docker pull --platform linux/arm64 ghcr.io/${{ github.repository_owner }}/krtk:latest
+          echo "Successfully pulled both architectures"
