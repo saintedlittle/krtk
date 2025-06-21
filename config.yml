@@ -1,0 +1,9 @@
+server:
+  port: ":8080"
+  host: "localhost:8080"
+cors:
+  allowed_origins: ["*", "localhost:5173"]
+  allowed_methods: ["GET", "POST", "OPTIONS"]
+  allowed_headers: ["Content-Type"]
+database:
+  file: "links.db"
